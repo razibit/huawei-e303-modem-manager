@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.4.1
+
+- Store app settings in the project folder or beside a standalone executable.
+
 ## 0.4.0
 
 - Add SMS, USSD, contacts, call history, mobile-data management and device diagnostics to the voice dialer.

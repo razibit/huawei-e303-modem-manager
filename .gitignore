@@ -8,3 +8,4 @@ publish*/
 *.zip
 /local-gp-e303-voice/
 /release-assets/
+/dialer-settings.json

@@ -72,10 +72,16 @@ internal sealed partial class MainForm : Form
     };
     private readonly System.Windows.Forms.Timer _callTimer = new() { Interval = 900 };
     private readonly SemaphoreSlim _commandLock = new(1, 1);
-    private readonly string _settingsPath = Path.Combine(
-        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-        "GP-E303-Voice",
-        "dialer-settings.json");
+    private readonly string _settingsPath = ResolveSettingsPath();
+
+    private static string ResolveSettingsPath()
+    {
+        var directory = new DirectoryInfo(AppContext.BaseDirectory);
+        for (var current = directory; current is not null; current = current.Parent)
+            if (File.Exists(Path.Combine(current.FullName, "HuaweiE303VoiceDialer.csproj")))
+                return Path.Combine(current.FullName, "dialer-settings.json");
+        return Path.Combine(directory.FullName, "dialer-settings.json");
+    }
     private SerialPort? _controlPort;
     private SerialPort? _audioPort;
     private VoiceAudioBridge? _audioBridge;
