@@ -26,11 +26,19 @@ A Windows desktop companion for a Huawei E303 USB modem: make voice calls, send 
 
 The E303 identifies itself through several USB interfaces; port numbers can differ across computers. Voice requires firmware that exposes PC voice audio. Calls, messages, USSD and data can incur carrier charges.
 
+## Original GP files and local archive
+
+The [v0.4.0 release](https://github.com/razibit/huawei-e303-modem-manager/releases/tag/v0.4.0) also provides `GP-E303-Voice-complete-archive.zip`, an exact snapshot of the original local GP-E303-Voice folder. It includes the Grameenphone Internet executable and its supporting files, drivers, documentation, original dialer builds, a community-hosted firmware candidate, and personal settings including call history. The file list and SHA-256 hashes are in [ARCHIVE-MANIFEST.sha256](ARCHIVE-MANIFEST.sha256).
+
+The GP software, drivers, firmware and other bundled third-party components retain their respective owners' copyright and license terms; the project's MIT license applies to the project's own source. The firmware candidate is an unsigned, community-hosted package; see its included README for provenance. Its inclusion is not a recommendation to flash it.
+
+On the original machine, `local-gp-e303-voice` contains the consolidated files. The previous `%LOCALAPPDATA%\GP-E303-Voice` path points there through a directory junction, so the app can continue using its existing settings location. The separate Program Files installation and Windows drivers remain managed by Windows.
+
 ## Status and limitations
 
 Outgoing calling was reported working on the original E303 setup. The expanded SMS, USSD, incoming-call, contacts and data controls were built but have not yet been verified end to end on physical hardware. Please report your modem revision, firmware and Windows version when sharing results. MMS, video calling, WLAN/VPN, SIM Toolkit and firmware updates are not implemented.
 
-Messages and contacts are managed in modem/SIM storage. Audio choices, the last APN, USSD shortcuts and up to 300 call-history entries are stored under `%LOCALAPPDATA%\GP-E303-Voice`. PINs and PUKs are not intentionally saved or logged. The app must remain open to monitor incoming calls and messages.
+Messages and contacts are managed in modem/SIM storage. Audio choices, the last APN, USSD shortcuts and up to 300 call-history entries are stored under `%LOCALAPPDATA%\GP-E303-Voice`. The project owner's settings and call history were deliberately included in the public archive. PINs and PUKs are not intentionally saved or logged by the app. The app must remain open to monitor incoming calls and messages.
 
 ## Build from source
 

@@ -6,3 +6,5 @@ publish*/
 *.suo
 *.pdb
 *.zip
+/local-gp-e303-voice/
+/release-assets/
