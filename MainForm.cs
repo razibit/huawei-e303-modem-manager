@@ -139,14 +139,14 @@ internal sealed partial class MainForm : Form
     {
         var oldControl = _controlPortBox.SelectedItem?.ToString();
         var oldAudio = _audioPortBox.SelectedItem?.ToString();
-        var names = GetPresentSerialPorts(out var verifiedPresent);
+        var names = GetPresentSerialPorts(out var verifiedPresent, out var detectedControl, out var detectedAudio);
 
         _controlPortBox.Items.Clear();
         _audioPortBox.Items.Clear();
         _controlPortBox.Items.AddRange(names);
         _audioPortBox.Items.AddRange(names);
-        SelectPort(_controlPortBox, oldControl, "COM3", names);
-        SelectPort(_audioPortBox, oldAudio, "COM4", names);
+        SelectPort(_controlPortBox, oldControl, detectedControl ?? "COM3", names);
+        SelectPort(_audioPortBox, oldAudio, detectedAudio ?? "COM4", names);
         Log($"Detected {(verifiedPresent ? "present" : "registered")} serial ports: {(names.Length == 0 ? "none" : string.Join(", ", names))}");
         if (!verifiedPresent) Log("Live port enumeration was unavailable; registered ports may include disconnected devices.");
         UpdateButtons();
@@ -260,16 +260,23 @@ internal sealed partial class MainForm : Form
         }
     }
 
-    private static string[] GetPresentSerialPorts(out bool verifiedPresent)
+    private static string[] GetPresentSerialPorts(out bool verifiedPresent, out string? controlPort, out string? audioPort)
     {
+        controlPort = null;
+        audioPort = null;
         try
         {
-            using var searcher = new ManagementObjectSearcher("SELECT Name FROM Win32_PnPEntity WHERE PNPClass = 'Ports'");
+            using var searcher = new ManagementObjectSearcher("SELECT Name FROM Win32_PnPEntity WHERE PNPClass = 'Ports' AND Present = TRUE");
             using var devices = searcher.Get();
-            var names = devices
+            var descriptions = devices
                 .Cast<ManagementObject>()
                 .Select(device => device["Name"]?.ToString())
                 .Where(name => !string.IsNullOrWhiteSpace(name))
+                .ToArray();
+            controlPort = FindHuaweiPort(descriptions, "PC UI Interface");
+            audioPort = FindHuaweiPort(descriptions, "Application Interface")
+                ?? FindHuaweiPort(descriptions, "PC Voice Interface");
+            var names = descriptions
                 .Select(name => Regex.Match(name!, @"\((COM\d+)\)$", RegexOptions.IgnoreCase))
                 .Where(match => match.Success)
                 .Select(match => match.Groups[1].Value.ToUpperInvariant())
@@ -286,6 +293,19 @@ internal sealed partial class MainForm : Form
                 .OrderBy(name => int.TryParse(name.AsSpan(3), out var number) ? number : int.MaxValue)
                 .ToArray();
         }
+    }
+
+    private static string? FindHuaweiPort(IEnumerable<string?> descriptions, string interfaceName)
+    {
+        foreach (var description in descriptions)
+        {
+            if (description is null
+                || !description.Contains("HUAWEI Mobile Connect", StringComparison.OrdinalIgnoreCase)
+                || !description.Contains(interfaceName, StringComparison.OrdinalIgnoreCase)) continue;
+            var match = Regex.Match(description, @"\((COM\d+)\)$", RegexOptions.IgnoreCase);
+            if (match.Success) return match.Groups[1].Value.ToUpperInvariant();
+        }
+        return null;
     }
 
     private static void SelectPort(ComboBox box, string? previous, string preferred, string[] names)

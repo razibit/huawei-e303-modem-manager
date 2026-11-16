@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.4.2
+
+- Detect Huawei control and audio ports by interface name when Windows changes their COM numbers.
+- Add screenshots of the project dashboard and modem manager.
+
 ## 0.4.1
 
 - Store app settings in the project folder or beside a standalone executable.

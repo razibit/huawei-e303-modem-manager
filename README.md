@@ -17,6 +17,36 @@ A Windows desktop companion for a Huawei E303 USB modem: make voice calls, send 
 - **Internet:** connect with an APN, view signal and registration, scan networks, and inspect session traffic.
 - **Device tools:** diagnostics and SIM security controls when supported.
 
+## Screenshots
+
+These screenshots show the two applications included in the project. Their appearance and available controls depend on the modem, driver and network.
+
+### Grameenphone Internet
+
+The project folder includes a copy of `Grameenphone Internet.exe`. With the E303 detected, its phone icon opens the calling keypad:
+
+![Grameenphone Internet calling keypad](docs/screenshots/grameenphone-internet-calling.png)
+
+The connection screen is used for mobile data profiles:
+
+![Grameenphone Internet connection screen](docs/screenshots/grameenphone-internet-connection.png)
+
+These images were captured from a byte-identical copy of the project executable, run with the project's configuration. The calling keypad was visible with an E303 attached; call audio was not verified as part of capturing it.
+
+### GP Modem Manager
+
+Our separate `HuaweiE303VoiceDialer.exe` provides call and audio controls alongside SMS, USSD, contacts and mobile-data controls. These screenshots use an empty demonstration profile with the modem disconnected; they show the interface rather than a live connection.
+
+| Calls and audio | SMS |
+| --- | --- |
+| ![Calls and audio selections](docs/screenshots/modem-manager-calls.png) | ![SMS inbox and composer](docs/screenshots/modem-manager-sms.png) |
+
+| USSD and package shortcuts | Internet |
+| --- | --- |
+| ![USSD requests and shortcuts](docs/screenshots/modem-manager-ussd.png) | ![Internet APN and connection controls](docs/screenshots/modem-manager-internet.png) |
+
+The [device and settings screen](docs/screenshots/modem-manager-device.png) provides device status, diagnostics, network selection and SIM security controls.
+
 ## Get started
 
 1. Install a working Huawei E303 Windows driver and connect the modem. Close any other modem manager using its ports.
@@ -24,7 +54,7 @@ A Windows desktop companion for a Huawei E303 USB modem: make voice calls, send 
 3. Run the app, select the modem control and PCM audio ports, and choose a microphone and speakers. Click **Check modem**.
 4. Use the tabs for calls, SMS, USSD, contacts, internet and device settings. Enter your carrier APN for mobile data.
 
-The E303 identifies itself through several USB interfaces; port numbers can differ across computers. Voice requires firmware that exposes PC voice audio. Calls, messages, USSD and data can incur carrier charges.
+The E303 identifies itself through several USB interfaces; port numbers can differ across computers. The modem manager looks for Huawei's PC UI and application interfaces by name, and you can select ports manually if needed. Voice requires firmware that exposes PC voice audio. Calls, messages, USSD and data can incur carrier charges.
 
 ## Original GP files and local archive
 
